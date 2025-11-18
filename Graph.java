@@ -120,41 +120,49 @@ public class Graph {
     }
     
     public void bfs(String startName) {
-        Queue queue = new Queue();
-        int indexNode = getIndex(startName);
-
-        if(indexNode == -1){
+        int startIndex = getIndex(startName);
+        if (startIndex == -1) {
             System.out.println("Vertex tidak ditemukan!");
             return;
         }
 
-        boolean[] visited = new boolean[daftarNama.length];
-        Node current = daftarNama[indexNode];
-        String name = current.getName();
-        queue.enqueue(name);
+        boolean[] visited = new boolean[tabelNama.length]; 
+        Queue queue = new Queue();
+
+        queue.enqueue(startName);
+        visited[startIndex] = true;
 
         System.out.println("\n=== BFS Traversal dari " + startName + " ===");
-        System.out.println("Urutan kunjungan: ");
-        
+        System.out.println("Urutan kunjungan:");
+
         while (!queue.isEmpty()) {
-            name = queue.dequeue();
-            indexNode = getIndex(name);
-            if(!visited[indexNode]){
-                System.out.println(name);
-                visited[indexNode] = true;
-                Node afterCurrent = current.getNext();
-                String nameAfterCurrent;
-                while (afterCurrent != null) {
-                    nameAfterCurrent = afterCurrent.getName();
-                    indexNode = getIndex(nameAfterCurrent);
-                    if(!visited[indexNode])
-                        queue.enqueue(nameAfterCurrent);
-                    afterCurrent = afterCurrent.getNext();
+            String currentName = queue.dequeue();
+            int currentIndex = getIndex(currentName);
+
+            if (currentIndex == -1) {
+                continue;
+            }
+
+            System.out.println(currentName);
+
+            Node neighbor = daftarNama[currentIndex];
+            while (neighbor != null) {
+                String neighborName = neighbor.getName();
+                int neighborIndex = getIndex(neighborName);
+
+                if (neighborIndex != -1 && !visited[neighborIndex]) {
+                    visited[neighborIndex] = true;
+                    queue.enqueue(neighborName);
                 }
+
+                neighbor = neighbor.getNext();
             }
         }
+
         System.out.println("END");
-    }
+}
+
+
     
     public void dfs(String startName){
         Stack stack = new Stack();
