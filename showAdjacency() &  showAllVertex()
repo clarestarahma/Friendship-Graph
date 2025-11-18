@@ -1,25 +1,36 @@
-public void showAdjacency() {
-    System.out.println("=== Adjacency List Pertemanan ===");
-
-    for (int i = 0; i < jumlahVertex; i++) {
-        System.out.print(daftarNama[i].nama + " : ");
-
-        for (int j = 0; j < tabelNama[i].length; j++) {
-            if (tabelNama[i][j] != null) {
-                System.out.print(tabelNama[i][j] + " ");
-            }
-        }
-        System.out.println();
-    }
-}
-
-
- public void showAllVertex() {
+public void showAllVertex() {
         System.out.println("=== Daftar Semua Vertex (Teman) ===");
 
-        for (int i = 0; i < jumlahVertex; i++) {
-            if (daftarNama[i] != null) {
-                System.out.println((i + 1) + ". " + daftarNama[i].getName());
+       
+        for (int i = 0; i < tabelData.length; i++) {
+            if (listName[i] != null) {
+                System.out.println((i + 1) + ". " + listName[i].getName());
             }
+        }
+    }
+
+    public void showAdjacency() {
+        System.out.println("=== List Pertemanan ===");
+
+        
+        int i = 0;
+
+        while (i < tabelData.length) {
+            if (listName[i] != null) {
+                System.out.print(listName[i].getName() + " : ");
+            } else {
+                i++;
+                continue;
+            }
+
+            
+            for (int j = 0; j < tabelData[i].length; j++) {
+                if (tabelData[i][j] != null) {
+                    System.out.print(tabelData[i][j] + " ");
+                }
+            }
+
+            System.out.println();
+            i++;
         }
     }
