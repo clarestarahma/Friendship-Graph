@@ -9,25 +9,25 @@ public class Stack {
         return top == null;
     }
 
-    public void push(int data) {
-        Node newNode = new Node(String.valueOf(data));
+    public void push(String nama) {
+        Node newNode = new Node(nama);
         newNode.setNext(top);
         top = newNode;
     }
 
-    public int pop() {
+    public String pop() {
         if (isEmpty()) {
-            throw new RuntimeException("Stack kosong!");
+            System.out.println("Stack kosong!");
         }
         Node temp = top;
         top = top.getNext();
-        return Integer.parseInt(temp.getName());
+        return temp.getName();
     }
 
-    public int peek() {
+    public String peek() {
         if (isEmpty()) {
-            throw new RuntimeException("Stack kosong!");
+            System.out.println("Stack kosong!");
         }
-        return Integer.parseInt(top.getName());
+        return top.getName();
     }
 }

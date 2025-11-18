@@ -11,8 +11,8 @@ public class Queue {
         return front == null;
     }
 
-    public void enqueue(int data) {
-        Node newNode = new Node(String.valueOf(data));
+    public void enqueue(String nama) {
+        Node newNode = new Node(nama);
         
         if (isEmpty()) {
             front = newNode;
@@ -23,9 +23,9 @@ public class Queue {
         }
     }
 
-    public int dequeue() {
+    public String dequeue() {
         if (isEmpty()) {
-            throw new RuntimeException("Queue kosong!");
+            System.out.println("Queue kosong!");
         }
         
         Node temp = front;
@@ -35,13 +35,13 @@ public class Queue {
             rear = null;
         }
         
-        return Integer.parseInt(temp.getName());
+        return temp.getName();
     }
 
-    public int peek() {
+    public String peek() {
         if (isEmpty()) {
-            throw new RuntimeException("Queue kosong!");
+            System.out.println("Queue kosong!");
         }
-        return Integer.parseInt(front.getName());
+        return front.getName();
     }
 }
