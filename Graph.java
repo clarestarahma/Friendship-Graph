@@ -56,6 +56,7 @@ public class Graph {
 
         newNodeName1.setNext(daftarNama[indexName2]);
         daftarNama[indexName2] = newNodeName1;
+        System.out.println("Edge antara '" + name1 + "' dan '" + name2 + "' berhasil ditambahkan.");
     }
 
     public void resize(){
@@ -139,7 +140,6 @@ public class Graph {
             name = queue.dequeue();
             indexNode = getIndex(name);
             if(!visited[indexNode]){
-                current = daftarNama[indexNode];
                 System.out.println(name);
                 visited[indexNode] = true;
                 Node afterCurrent = current.getNext();
@@ -158,40 +158,30 @@ public class Graph {
     
     public void dfs(String startName){
         Stack stack = new Stack();
-        int indexNode = getIndex(startName);
-
-        if(indexNode == -1){
-            System.out.println("Vertex tidak ditemukan!");
-            return;
-        }
-
         boolean[] visited = new boolean[daftarNama.length];
-        Node current = daftarNama[indexNode];
-        String name = current.getName();
+
+        int indexVertex = getIndex(startName);
+        String name = startName;
+
         stack.push(name);
 
-        System.out.println("\n=== DFS Traversal dari " + startName + " ===");
-        System.out.println("Urutan kunjungan: ");
-        
         while (!stack.isEmpty()) {
             name = stack.pop();
-            indexNode = getIndex(name);
-            if(!visited[indexNode]){
-                current = daftarNama[indexNode];
-                System.out.println(name);
-                visited[indexNode] = true;
-                Node afterCurrent = current.getNext();
-                String nameAfterCurrent;
-                while (afterCurrent != null) {
-                    nameAfterCurrent = afterCurrent.getName();
-                    indexNode = getIndex(nameAfterCurrent);
-                    if(!visited[indexNode])
-                        stack.push(nameAfterCurrent);
-                    afterCurrent = afterCurrent.getNext();
+            indexVertex = getIndex(name);
+            System.out.println(name);
+            visited[indexVertex] = true;
+
+            Node neighbor = daftarNama[indexVertex];
+            while (neighbor != null) {
+                name = neighbor.getName();
+                int indexNeighbor = getIndex(name);
+                if(!visited[indexNeighbor] && indexNeighbor != -1){
+                    stack.push(name);
+                    visited[indexNeighbor] = true;
                 }
+                neighbor = neighbor.getNext();
             }
         }
-        System.out.println("END");
     }
     
     public void showAllVertex() {
