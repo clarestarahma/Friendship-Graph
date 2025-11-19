@@ -4,8 +4,8 @@ public class Graph {
     private int indexData;
     
     public Graph() {
-        daftarNama = new Node[10];
-        tabelNama = new String[10][2];
+        daftarNama = new Node[2];
+        tabelNama = new String[2][2];
         indexData = 0;
     }
     
@@ -15,14 +15,6 @@ public class Graph {
                 return Integer.parseInt(tabelNama[i][1]);
         }
         return -1;
-    }
-
-    public String getName(int index){
-        for (int i = 0; i < tabelNama.length; i++) {
-            if(tabelNama[i][0] != null && Integer.parseInt(tabelNama[i][1]) == index)
-                return tabelNama[i][0];
-        }
-        return null;
     }
     
     public void addNama(String name) {
@@ -44,16 +36,6 @@ public class Graph {
         }
     }
 
-    boolean searchNeighbor(String nama, String neighbor){
-        Node node = daftarNama[getIndex(nama)];
-
-        while (node != null) {
-            if(node.getName().equals(neighbor)) return true;
-            node = node.getNext();
-        }
-        return false;
-    }
-
     void addEdge(String name1, String name2){
         int indexName1 = getIndex(name1);
         int indexName2 = getIndex(name2);
@@ -61,24 +43,17 @@ public class Graph {
         if(indexName1 == -1 || indexName2 == -1){
             System.out.println("Salah satu atau kedua node tidak ditemukan.");
             return;
-        }else if (name1.equals(name2)) {
-            System.out.println("Nama tidak boleh sama.");
-            return;
-        }else if(searchNeighbor(name1, name2)){
-            System.out.println("Hubungan pertemanan sudah ada.");
-            return;
-        }else{
-            Node newNodeName1 = new Node(name1);
-            Node newNodeName2 = new Node(name2);
-    
-            newNodeName2.setNext(daftarNama[indexName1]);
-            daftarNama[indexName1] = newNodeName2;
-    
-            newNodeName1.setNext(daftarNama[indexName2]);
-            daftarNama[indexName2] = newNodeName1;
-            System.out.println("Edge antara '" + name1 + "' dan '" + name2 + "' berhasil ditambahkan.");
         }
 
+        Node newNodeName1 = new Node(name1);
+        Node newNodeName2 = new Node(name2);
+
+        newNodeName2.setNext(daftarNama[indexName1]);
+        daftarNama[indexName1] = newNodeName2;
+
+        newNodeName1.setNext(daftarNama[indexName2]);
+        daftarNama[indexName2] = newNodeName1;
+        System.out.println("Edge antara '" + name1 + "' dan '" + name2 + "' berhasil ditambahkan.");
     }
 
     public void resize(){
@@ -144,47 +119,41 @@ public class Graph {
     }
     
     public void bfs(String startName) {
-        int startIndex = getIndex(startName);
-        if (startIndex == -1) {
+        Queue queue = new Queue();
+        int indexNode = getIndex(startName);
+
+        if(indexNode == -1){
             System.out.println("Vertex tidak ditemukan!");
             return;
         }
 
-        boolean[] visited = new boolean[tabelNama.length]; 
-        Queue queue = new Queue();
-
-        queue.enqueue(startName);
-        visited[startIndex] = true;
+        boolean[] visited = new boolean[daftarNama.length];
+        Node current = daftarNama[indexNode];
+        String name = current.getName();
+        queue.enqueue(name);
 
         System.out.println("\n=== BFS Traversal dari " + startName + " ===");
-        System.out.println("Urutan kunjungan:");
-
+        System.out.println("Urutan kunjungan: ");
+        
         while (!queue.isEmpty()) {
-            String currentName = queue.dequeue();
-            int currentIndex = getIndex(currentName);
-
-            if (currentIndex == -1) {
-                continue;
-            }
-
-            System.out.println(currentName);
-
-            Node neighbor = daftarNama[currentIndex];
-            while (neighbor != null) {
-                String neighborName = neighbor.getName();
-                int neighborIndex = getIndex(neighborName);
-
-                if (neighborIndex != -1 && !visited[neighborIndex]) {
-                    visited[neighborIndex] = true;
-                    queue.enqueue(neighborName);
+            name = queue.dequeue();
+            indexNode = getIndex(name);
+            if(!visited[indexNode]){
+                System.out.println(name);
+                visited[indexNode] = true;
+                Node afterCurrent = current.getNext();
+                String nameAfterCurrent;
+                while (afterCurrent != null) {
+                    nameAfterCurrent = afterCurrent.getName();
+                    indexNode = getIndex(nameAfterCurrent);
+                    if(!visited[indexNode])
+                        queue.enqueue(nameAfterCurrent);
+                    afterCurrent = afterCurrent.getNext();
                 }
-
-                neighbor = neighbor.getNext();
             }
         }
-
         System.out.println("END");
-}
+    }
     
     public void dfs(String startName){
         Stack stack = new Stack();
@@ -194,12 +163,12 @@ public class Graph {
         String name = startName;
 
         stack.push(name);
-        visited[indexVertex] = true;
 
         while (!stack.isEmpty()) {
             name = stack.pop();
             indexVertex = getIndex(name);
             System.out.println(name);
+            visited[indexVertex] = true;
 
             Node neighbor = daftarNama[indexVertex];
             while (neighbor != null) {
@@ -212,7 +181,6 @@ public class Graph {
                 neighbor = neighbor.getNext();
             }
         }
-        System.out.println("END");
     }
     
     public void showAllVertex() {
@@ -234,7 +202,7 @@ public class Graph {
         for (int i = 0; i < daftarNama.length; i++) {
 
             if (daftarNama[i] != null) {
-                System.out.print(getName(i) + ": ");
+                System.out.print(tabelNama[i][0] + " : ");
 
                 Node current = daftarNama[i];
                 while(current != null){
